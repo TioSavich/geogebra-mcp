@@ -1,0 +1,16 @@
+# Drop into ~/.codex/config.toml (or merge with your existing config).
+# After saving, `codex` will discover the GeoGebra tools on its next launch.
+
+[mcp_servers.geogebra]
+command = "npx"
+args = ["-y", "@tiosavich/geogebra-mcp"]
+
+# If you've installed the package globally instead:
+# [mcp_servers.geogebra]
+# command = "geogebra-mcp"
+
+# Optional environment overrides:
+# [mcp_servers.geogebra.env]
+# GEOGEBRA_APP = "geometry"
+# GEOGEBRA_HEADLESS = "true"
+# GEOGEBRA_CODEBASE = "https://www.geogebra.org/apps/5.2.846.0/web3d"

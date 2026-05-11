@@ -1,0 +1,60 @@
+{
+  "name": "@tiosavich/geogebra-mcp",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for GeoGebra: construct, evaluate, export, and round-trip .ggb files from any MCP client (Claude Desktop, Claude Code, Cowork, Codex CLI, etc.).",
+  "license": "MIT",
+  "author": "Tio Savich <tsavich@gmail.com>",
+  "homepage": "https://github.com/TioSavich/geogebra-mcp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TioSavich/geogebra-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TioSavich/geogebra-mcp/issues"
+  },
+  "type": "module",
+  "main": "dist/src/index.js",
+  "bin": {
+    "geogebra-mcp": "dist/src/index.js"
+  },
+  "files": [
+    "dist",
+    "assets",
+    "README.md",
+    "SECURITY.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "node dist/src/index.js",
+    "dev": "tsc && node dist/src/index.js",
+    "smoke": "tsc && node dist/test/smoke.js",
+    "mcp-smoke": "tsc && node dist/test/mcp-smoke.js",
+    "postinstall": "playwright install --with-deps chromium || playwright install chromium || true",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.20.0",
+    "playwright": "^1.50.0",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.6.3"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "geogebra",
+    "math",
+    "education",
+    "claude",
+    "codex",
+    "ai-tools"
+  ]
+}

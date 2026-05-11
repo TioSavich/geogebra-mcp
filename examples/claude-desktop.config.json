@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "geogebra": {
+      "command": "npx",
+      "args": ["-y", "@tiosavich/geogebra-mcp"],
+      "env": {
+        "GEOGEBRA_APP": "graphing"
+      }
+    }
+  }
+}

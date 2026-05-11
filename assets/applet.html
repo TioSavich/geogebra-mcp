@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GeoGebra MCP host</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #ffffff; }
+  #ggb { width: 100vw; height: 100vh; }
+</style>
+<!--
+  GeoGebra Apps loader. We pin a specific HTML5 codebase version below so that
+  upstream changes can't silently shift our behavior. The deployggb.js file is
+  itself unversioned (it's a thin loader), so the pinned codebase is the real
+  version lock.
+-->
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+</head>
+<body>
+<div id="ggb"></div>
+<script>
+(function () {
+  // Pinned GeoGebra HTML5 codebase. The driver may override this by setting
+  // window.__GGB_CODEBASE before injecting; otherwise the default below is used.
+  // Bump this string deliberately when you want a newer GeoGebra version.
+  var PINNED_CODEBASE = "https://www.geogebra.org/apps/5.2.846.0/web3d";
+
+  // Parse query string for app selection. Defaults to "graphing" which gives
+  // us algebra + 2D graphics, supports CAS via evalCommandCAS, and is the
+  // most generally useful surface.
+  var qs = new URLSearchParams(window.location.search);
+  // Default to "suite" because it bundles graphing + geometry + 3D + CAS so
+  // every tool in this MCP works out of the box. Override via ?app=...
+  var appName = qs.get("app") || "suite";
+  var width = parseInt(qs.get("w") || "1024", 10);
+  var height = parseInt(qs.get("h") || "768", 10);
+
+  // Safety: enableScripting is disabled so that loaded .ggb files cannot
+  // execute embedded JavaScript or Python scripts attached to objects.
+  // useBrowserForJS is false so window-scope JS hooks (onUpdate etc.) inside
+  // a .ggb file have no effect.
+  var params = {
+    appName: appName,
+    width: width,
+    height: height,
+    showToolBar: false,
+    showAlgebraInput: false,
+    showMenuBar: false,
+    showResetIcon: false,
+    enableLabelDrags: false,
+    enableShiftDragZoom: true,
+    enableRightClick: false,
+    errorDialogsActive: false,
+    useBrowserForJS: false,
+    enableScripting: false,
+    showZoomButtons: false,
+    showFullscreenButton: false,
+    allowStyleBar: false,
+    preventFocus: true,
+    language: "en",
+    appletOnLoad: function (api) {
+      // The Apps API object. Multiple readiness signals so the driver can
+      // poll robustly.
+      window.__ggb = api;
+      window.__ggbReady = true;
+      try {
+        api.evalCommand("");
+      } catch (e) { /* swallow — first call sometimes warms internals */ }
+    }
+  };
+
+  var applet = new GGBApplet(params, true);
+  if (window.__GGB_CODEBASE) {
+    applet.setHTML5Codebase(window.__GGB_CODEBASE);
+  } else {
+    applet.setHTML5Codebase(PINNED_CODEBASE);
+  }
+
+  // Inject as soon as the DOM is ready.
+  if (document.readyState === "loading") {
+    window.addEventListener("DOMContentLoaded", function () { applet.inject("ggb"); });
+  } else {
+    applet.inject("ggb");
+  }
+
+  // Promise wrapper around getBase64 for the driver — Apps API's getBase64
+  // can be sync (returns string) OR async (callback), depending on version.
+  window.__ggbGetBase64 = function () {
+    return new Promise(function (resolve) {
+      try {
+        var maybe = window.__ggb.getBase64(function (b64) { resolve(b64); });
+        if (typeof maybe === "string" && maybe.length > 0) resolve(maybe);
+      } catch (e) {
+        try { resolve(window.__ggb.getBase64()); }
+        catch (e2) { resolve(null); }
+      }
+    });
+  };
+
+  window.__ggbSetBase64 = function (b64) {
+    return new Promise(function (resolve) {
+      try {
+        window.__ggb.setBase64(b64, function () { resolve(true); });
+      } catch (e) {
+        try { window.__ggb.setBase64(b64); resolve(true); }
+        catch (e2) { resolve(false); }
+      }
+    });
+  };
+
+  window.__ggbExportSVG = function () {
+    return new Promise(function (resolve) {
+      try {
+        window.__ggb.exportSVG(function (svg) { resolve(svg); });
+      } catch (e) { resolve(null); }
+    });
+  };
+
+  window.__ggbExportPDF = function (scale, sliderLabel) {
+    return new Promise(function (resolve) {
+      try {
+        window.__ggb.exportPDF(scale || 1, function (pdfDataUrl) { resolve(pdfDataUrl); }, sliderLabel || "");
+      } catch (e) { resolve(null); }
+    });
+  };
+})();
+</script>
+</body>
+</html>

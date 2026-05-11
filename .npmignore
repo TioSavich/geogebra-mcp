@@ -1,0 +1,17 @@
+# Defense in depth: package.json `files` already whitelists what ships,
+# but if anyone ever drops the `files` field this catches the leaks.
+*.map
+src/
+test/
+test-output/
+demo-output/
+demo.mjs
+*.probe.mjs
+cas-probe.mjs
+.git/
+.gitignore
+node_modules/
+.env
+.env.*
+*.tsbuildinfo
+SETUP.md

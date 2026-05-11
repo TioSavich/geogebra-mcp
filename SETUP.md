@@ -32,7 +32,7 @@ If you'd rather start clean and write your own commit message:
 cd geogebra-mcp
 rm -rf .git
 git init -b main
-git config user.email "tsavich@gmail.com"
+git config user.email "tiosavich@gmail.com"
 git config user.name "Tio Savich"
 git add -A
 git commit -m "Initial commit: geogebra-mcp v0.1.0"

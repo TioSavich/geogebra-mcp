@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Model Context Protocol server for GeoGebra: construct, evaluate, export, and round-trip .ggb files from any MCP client (Claude Desktop, Claude Code, Cowork, Codex CLI, etc.).",
   "license": "MIT",
-  "author": "Tio Savich <tsavich@gmail.com>",
+  "author": "Tio Savich <tiosavich@gmail.com>",
   "homepage": "https://github.com/TioSavich/geogebra-mcp",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "geogebra-mcp": "dist/src/index.js"
   },
   "files": [
-    "dist",
+    "dist/src",
     "assets",
     "README.md",
     "SECURITY.md",
@@ -34,8 +34,10 @@
     "dev": "tsc && node dist/src/index.js",
     "smoke": "tsc && node dist/test/smoke.js",
     "mcp-smoke": "tsc && node dist/test/mcp-smoke.js",
+    "clean": "rm -rf dist",
     "postinstall": "playwright install --with-deps chromium || playwright install chromium || true",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run clean && tsc"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.20.0",

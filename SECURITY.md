@@ -49,4 +49,4 @@
 
 ## Reporting a vulnerability
 
-Email tsavich@gmail.com or open a GitHub Security Advisory at https://github.com/TioSavich/geogebra-mcp/security/advisories.
+Email tiosavich@gmail.com or open a GitHub Security Advisory at https://github.com/TioSavich/geogebra-mcp/security/advisories.
